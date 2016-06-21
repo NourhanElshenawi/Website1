@@ -15,8 +15,19 @@ use Monolog\Handler\StreamHandler;
 
 // Create and configure Slim app
 //$app = new \Slim\App;   //version 3
-$app = new \Slim\Slim();// new app object variable  slim instance dont remove
-// Define app routes
+$app = new \Slim\Slim(array(
+        'view'=> new\Slim\Views\Twig() // overriding view class
+
+));// new app object variable  slim instance dont remove
+// Define app routescom
+$view = $app->view();
+$view->parserOptions = array(
+    'debug'=> true
+);
+
+$view->parserExtensions = array(
+    new \Slim\Views\TwigExtension()
+);
 
 //$app->get('/hello/{name}', function ($request, $response, $args) {
 //    return $response->write("Hello " . $args['name']);
@@ -31,15 +42,30 @@ $app->get('/hello/:name', function($name){
 
 $app->get('/', function() use($app){
 //    echo 'Hello, this is the homepage.';
-        $app->render('index.html');
-});     // arg 1 url expecting to get, home. arg2 closure to use functionality
+        $app->render('about.twig'); //looks into templates
+})->name('home');     // arg 1 url expecting to get, home. arg2 closure to use functionality
 
 
 $app->get('/contact', function() use($app){
-    echo 'Feel free to  contact us.';
-//        $app->render('index.html');
+//    echo 'Feel free to  contact us.';
+        $app->render('contact.twig');
 
+})->name('contact');
+
+$app->post('/contact', function() use($app){
+    $name = $app->request->post('name');
+    $email = $app->request->post('email');
+    $msg = $app->request->post('msg');
+
+    if(!empty($name) && !empty($email) && !empty($msg) ){
+
+    } else {
+            // error message
+        $app->render('contact.twig');
+    }
 });
+
+
 
 
 
