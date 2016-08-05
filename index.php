@@ -46,6 +46,12 @@ $app->get('/', function() use($app){
 })->name('home');     // arg 1 url expecting to get, home. arg2 closure to use functionality
 
 
+$app->get('/index', function() use($app){
+//    echo 'Hello, this is the homepage.';
+    $app->render('index.twig'); //looks into templates
+})->name('test');     // arg 1 url expecting to get, home. arg2 closure to use functionality
+
+
 $app->get('/contact', function() use($app){
 //    echo 'Feel free to  contact us.';
         $app->render('contact.twig');
